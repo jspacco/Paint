@@ -13,7 +13,7 @@ public class Paint {
     private  List<Color> colors;
     private int[] sizes;
     private Options optionsPanel;
-    private Canvas canvasPanel;
+    private Panel canvasPanel;
     private final int WIDTH = 600;
     private final int HEIGHT = 400;
 
@@ -24,7 +24,7 @@ public class Paint {
         int canvasWidth = (WIDTH * 8)/10;
         int optionsWidth = WIDTH - canvasWidth;
 
-        this.canvasPanel = new Canvas(
+        this.canvasPanel = new Panel(
                 canvasWidth,
                 HEIGHT,
                 colors.get(0),

@@ -6,23 +6,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Canvas {
-    private List<Point> currentLine;
-    private List<List<Point>> lines;
+    private List<BrushPoint> currentLine;
+    private List<List<BrushPoint>> lines;
 
     public Canvas() {
         this.lines = new LinkedList<>();
     }
 
-    public List<List<Point>> lines() {
+    public List<List<BrushPoint>> lines() {
         return this.lines;
     }
-    public List<Point> currentLine() {
+    public List<BrushPoint> currentLine() {
         return this.currentLine;
     }
 
-    public void drawLine(Point p) {
+    public void drawLine(BrushPoint p) {
         if (this.currentLine == null) {
-            this.currentLine = new ArrayList<Point>();
+            this.currentLine = new ArrayList<BrushPoint>();
         }
         currentLine.add(p);
     }
@@ -30,6 +30,10 @@ public class Canvas {
     public void endLine() {
         this.lines.add(currentLine);
         this.currentLine = null;
+    }
+    
+    public List<List<BrushPoint>> getLines() {
+    	return lines;
     }
 
 }

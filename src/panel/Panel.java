@@ -1,28 +1,48 @@
 package panel;
 
-import canvas.Point;
-import paint.Brush;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Canvas extends JPanel implements MouseMotionListener, MouseListener {
+import javax.swing.JPanel;
+
+import canvas.BrushPoint;
+//import canvas.Point;
+import paint.Brush;
+
+public class Panel extends JPanel implements MouseMotionListener, MouseListener {
     canvas.Canvas paintCanvas = new canvas.Canvas();
     ArrayList<Brush> brushes = new ArrayList<>();
     Brush selectedBrush;
 
-    public Canvas(int width, int height, Color c, int size) {
+    public Panel(int width, int height, Color c, int size) {
         this.selectedBrush = new Brush(size, c);
         this.setPreferredSize(new Dimension(width, height));
 
         this.setBackground(Color.white);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        this.requestFocus();
+        this.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        		System.out.println("key press: "+e.getKeyChar());
+        		if (e.getKeyChar() == 'v') {
+        			System.out.println("number of lines: " +paintCanvas.getLines().size());
+        		}
+        	}
+		});
+			
     }
 
     public void changeBrushColor(Color c) {
@@ -37,19 +57,20 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
 
-        List<List<Point>> lines = new ArrayList<>();
+        List<List<BrushPoint>> lines = new ArrayList<>();
         lines.addAll(paintCanvas.lines());
 
         if(paintCanvas.currentLine() != null)
             lines.add(paintCanvas.currentLine());
 
-        for (List<Point> line : lines) {
+        for (List<BrushPoint> line : lines) {
             for (int i = 0; i < line.size() - 1; i++) {
-                Point p1 = line.get(i);
-                Point p2 = line.get(i + 1);
+                BrushPoint p1 = line.get(i);
+                BrushPoint p2 = line.get(i + 1);
                 g.setColor(p1.color());
-                Graphics2D g2d = (Graphics2D) g;
+                
                 g2d.setStroke(new BasicStroke(p1.size()));
                 g.drawLine(p1.xpos(), p1.ypos(), p2.xpos(), p2.ypos());
             }
@@ -58,8 +79,8 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        paint.Point point = new paint.Point(e.getX(), e.getY());
-        canvas.Point canvasPoint = new canvas.Point(point, selectedBrush);
+        Point point = new Point(e.getX(), e.getY());
+        canvas.BrushPoint canvasPoint = new canvas.BrushPoint(point, selectedBrush);
         paintCanvas.drawLine(canvasPoint);
         this.repaint();
     }
@@ -73,8 +94,7 @@ public class Canvas extends JPanel implements MouseMotionListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        paint.Point point = new paint.Point(e.getX(), e.getY());
-        canvas.Point canvasPoint = new canvas.Point(point, selectedBrush);
+        canvas.BrushPoint canvasPoint = new canvas.BrushPoint(e.getPoint(), selectedBrush);
         paintCanvas.drawLine(canvasPoint);
         this.repaint();
     }
