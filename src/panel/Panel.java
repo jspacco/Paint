@@ -17,11 +17,12 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import canvas.BrushPoint;
+import canvas.Canvas;
 //import canvas.Point;
 import paint.Brush;
 
 public class Panel extends JPanel implements MouseMotionListener, MouseListener {
-    canvas.Canvas paintCanvas = new canvas.Canvas();
+    Canvas paintCanvas = new Canvas();
     ArrayList<Brush> brushes = new ArrayList<>();
     Brush selectedBrush;
 
@@ -33,15 +34,7 @@ public class Panel extends JPanel implements MouseMotionListener, MouseListener 
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.requestFocus();
-        this.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyTyped(KeyEvent e) {
-        		System.out.println("key press: "+e.getKeyChar());
-        		if (e.getKeyChar() == 'v') {
-        			System.out.println("number of lines: " +paintCanvas.getLines().size());
-        		}
-        	}
-		});
+        
 			
     }
 

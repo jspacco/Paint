@@ -2,25 +2,20 @@ package panel;
 
 import javax.swing.*;
 import java.awt.*;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Paint {
-    private JFrame frame = new JFrame();
-    private JPanel panel = new JPanel();
+public class Paint extends JFrame {
+    
 
-    private  List<Color> colors;
-    private int[] sizes;
     private Options optionsPanel;
     private Panel canvasPanel;
     private final int WIDTH = 600;
     private final int HEIGHT = 400;
 
     public Paint(List<Color> colors, int[] sizes) {
-        this.colors = colors;
-        this.sizes = sizes;
-
         int canvasWidth = (WIDTH * 8)/10;
         int optionsWidth = WIDTH - canvasWidth;
 
@@ -36,19 +31,30 @@ public class Paint {
                 colors,
                 sizes);
 
-        this.panel = new JPanel();
-        this.panel.setSize(WIDTH, HEIGHT);
-        this.panel.setBackground(new Color(247, 250, 252));
-        this.panel.add(canvasPanel);
-        this.panel.add(optionsPanel);
+        
+        JPanel panel = new JPanel();
+        panel.setSize(WIDTH, HEIGHT);
+        panel.setBackground(new Color(247, 250, 252));
+        panel.add(canvasPanel);
+        panel.add(optionsPanel);
+        
+        this.setFocusable(true);
+        
+        this.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyTyped(KeyEvent e) {
+        		System.out.println("key press: "+e.getKeyChar());
+        		if (e.getKeyChar() == 'v') {
+        			//System.out.println("number of lines: " +paintCanvas.getLines().size());
+        		}
+        	}
+		});
 
-
-        this.frame.add(this.panel);
-        this.frame.setSize(new Dimension(WIDTH, HEIGHT));
-        this.frame.setVisible(true);
-        this.frame.pack();
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        this.add(panel);
+        this.setSize(new Dimension(WIDTH, HEIGHT));
+        this.setVisible(true);
+        this.pack();
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     void changeColor(Color color) {
